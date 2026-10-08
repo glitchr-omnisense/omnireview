@@ -1,0 +1,27 @@
+# glitchr/omnireview with every gateway package:
+#
+#   cp .env.dist .env                                    # a platform's keys and places, when you have them
+#   docker compose run --rm omnireview gateways            # which gateways are installed and configured, what each gives, its terms
+#   docker compose run --rm omnireview bare                # plain PHP: no bundle, no container, the platforms' recorded answers, and what PHP loaded
+#   docker compose run --rm omnireview bare --live         # the same, the platforms with keys in .env asked for real
+#   docker compose run --rm omnireview test                # every package's tests
+#
+# Gateways come from GitHub (branch 1.x) unless their checkout sits under
+# OMNIREVIEW_PLUGINS (set it to ../.. in .env when this core sits in the
+# workspace beside them): then that checkout is what runs.
+name: omnireview-harness
+
+services:
+  omnireview:
+    build: .
+    image: glitchr/omnireview-harness
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ..:/omnireview/core
+      - ${OMNIREVIEW_PLUGINS:-./plugins}:/omnireview/plugins:ro
+      - harness:/harness
+
+volumes:
+  harness:
