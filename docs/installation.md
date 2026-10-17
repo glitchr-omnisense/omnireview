@@ -6,7 +6,7 @@ order: 1
 # Installation and a first rating
 
 ```sh
-composer require glitchr/omnireview omnireview/google
+composer require omniscient/omnireview omnireview/google
 composer require omnireview/tripadvisor
 composer require omnireview/trustpilot
 ```

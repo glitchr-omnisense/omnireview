@@ -1,5 +1,5 @@
 {
-    "name": "glitchr/omnireview",
+    "name": "omniscient/omnireview",
     "type": "library",
     "description": "Omnireview: what customers say of an establishment elsewhere - its rating, its reviews, replying as the establishment, inviting a customer to review, the link to leave one - whoever hosts them: Google (omnireview/google), Tripadvisor (omnireview/tripadvisor), Trustpilot (omnireview/trustpilot), each platform's terms of display and caching declared; and its Symfony and Twig bridges, which always show the origin, the date and the link.",
     "keywords": [
@@ -31,6 +31,9 @@
         "symfony/http-client": "^6.4|^7.0|^8.0",
         "symfony/http-kernel": "^6.4|^7.0|^8.0",
         "twig/twig": "^3.0"
+    },
+    "replace": {
+        "glitchr/omnireview": "self.version"
     },
     "suggest": {
         "omnireview/google": "Google: Places API (rating, reviews) and Business Profile API (all reviews, replying, for the owner)",

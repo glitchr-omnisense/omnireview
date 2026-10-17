@@ -8,7 +8,7 @@ order: 4
 Omnireview runs without a framework ([installation](installation.md)); in a Symfony application its
 bundle does the wiring. Its components - `symfony/config`, `symfony/dependency-injection`,
 `symfony/http-kernel`, and `twig/twig`, `symfony/cache-contracts` for the Twig functions - are not
-required by `glitchr/omnireview`: the application has them, and nothing of them is loaded outside
+required by `omniscient/omnireview`: the application has them, and nothing of them is loaded outside
 Symfony.
 
 Register `Omnireview\Bridge\Symfony\OmnireviewBundle` (no Flex recipe):
