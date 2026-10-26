@@ -45,11 +45,17 @@ their **date** and their **link**, kept in the cache no longer than the platform
 
 ## Documentation
 
-- [Installation and a first rating](docs/installation.md)
-- [Models](docs/models.md)
-- [Gateways: the contract, what each gives, writing one](docs/gateways.md)
-- [Symfony and Twig](docs/symfony.md)
+- [The manual's home: providers, when to use it](docs/index.md)
+- [Installation and a first script](docs/installation.md)
+- [Symfony and Twig](docs/symfony.md) and [Laravel](docs/laravel.md)
+- [Concepts and models](docs/models.md)
+- [Usage: rating, reviews, replying, inviting, the write link, the terms](docs/gateways.md)
+- [Configuration reference](docs/configuration.md)
+- [Errors](docs/errors.md)
+- [Testing](docs/testing.md)
 - [The Docker harness: bare PHP, the console](docs/harness.md)
+- [Writing a provider](docs/providers.md)
+- [Verified and not](docs/verified.md)
 
 ## Plain PHP
 

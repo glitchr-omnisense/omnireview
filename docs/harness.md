@@ -1,6 +1,6 @@
 ---
 title: The Docker harness
-order: 5
+order: 70
 ---
 
 # The Docker harness
@@ -54,5 +54,61 @@ Classes of a framework (DependencyInjection, Config, HttpKernel, HttpFoundation,
 `Tests/BareTest.php` runs `bare --json` in a process of its own and checks the list - and, so that
 the check is not blind, that loading the bundle does name the framework.
 
-The image is `php:8.4-cli-alpine` with Composer; the harness's packages live in the `harness`
-volume of the `omnireview-harness` project.
+The image is `php:8.4-cli-alpine` with Composer and the `zip` extension
+(`omnisense/omnireview-harness`); the harness's packages live in the `harness` volume of the
+`omnireview-harness` project.
+
+## How it is composed
+
+`docker/entrypoint.sh` runs `docker/harness/setup.php`, which writes `/harness/composer.json` and
+`/harness/phpunit.xml`: this core from its checkout (a path repository, `/omnireview/core`), each
+gateway of `docker/harness/plugins.php` (`google`, `tripadvisor`, `trustpilot`: its tests'
+namespace and its factory class) from its checkout under `/omnireview/plugins` when there is one
+whose `composer.json` names it, else from `https://github.com/glitchr-omnisense/omnireview-<slug>.git`
+(branch 1.x). Composer installs when `vendor/` is missing and updates when `composer.json` is newer
+than its lock. Then the first argument picks the command:
+
+| Argument | Runs |
+|---|---|
+| `test` | `vendor/bin/phpunit` with the rest of the arguments: one test suite per package |
+| `bare` | `docker/harness/bin/bare` |
+| `composer`, `sh`, `php` | that program, as it is |
+| anything else (default `gateways`) | the console, `docker/harness/bin/omnireview` |
+
+## Settings
+
+`docker/.env` (copied from `.env.dist`, git-ignored):
+
+| Variable | |
+|---|---|
+| `OMNIREVIEW_PLUGINS` | where the gateways' checkouts are (`../..` in the workspace); unset, they come from GitHub |
+| `GOOGLE_PLACES_KEY`, `GOOGLE_PLACE_ID` | the Places API key and a place: `google` is configured with both |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_LOCATION` | the owner's side: the OAuth client, the refresh token, `accounts/<a>/locations/<l>` |
+| `TRIPADVISOR_KEY`, `TRIPADVISOR_LOCATION`, `TRIPADVISOR_REFERER` | the Content API key, a location ID, the `Referer` |
+| `TRUSTPILOT_API_KEY`, `TRUSTPILOT_BUSINESS_UNIT` | the key and a business unit ID |
+| `TRUSTPILOT_API_SECRET`, `TRUSTPILOT_BUSINESS_USER_ID` | replying and inviting |
+
+`docker/harness/config/gateways.php` reads them: a gateway is configured from them only when every
+variable of its `needs` is set, else with example options (`api_key: example`) and an example place.
+`gateways` prints which; `bare` uses the example options with the recorded answers unless
+`--live` is given and the variables are set. `OMNIREVIEW_AUTOLOAD` makes `bare` use another
+autoloader (a workspace's `vendor/autoload.php`).
+
+## The console
+
+`docker compose run --rm omnireview gateways` builds the registry from the installed factories and
+prints, nothing called: each gateway, whether it is installed, whether its settings come from
+`.env` or the example (naming the variables missing), what it gives, how long it may be kept, the
+reviews per call, and what it is credited to.
+
+## Running against the workspace
+
+Without the harness's volume, the image runs the workspace's own `vendor/` (every package
+symlinked from its checkout), read-only and offline:
+
+```sh
+docker run --rm --network none --entrypoint php -v ~/Sites/omnireview:/w:ro -w /w \
+    omnisense/omnireview-harness vendor/bin/phpunit --cache-directory /tmp/pu
+```
+
+This is how the examples of this manual were run on 2026-10-26 (19 tests, 129 assertions, green).
