@@ -1,12 +1,12 @@
-# omniscient/omnireview
+# omnisense/omnireview
 
 One contract for **what customers say of an establishment elsewhere** - its rating, its reviews,
 replying as the establishment, inviting a customer to leave one, the link to write one - whoever
 hosts them: Google, Tripadvisor, Trustpilot.
 
-Published as `omniscient/omnireview` (formerly `glitchr/omnireview`, which this package replaces: a
+Published as `omnisense/omnireview` (formerly `glitchr/omnireview`, which this package replaces: a
 `composer.json` that still requires the old name keeps resolving to this package, never both).
-`omniscient/` is the vendor of every family's core; the providers keep theirs (`omnireview/google`...).
+`omnisense/` is the vendor of every family's core; the providers keep theirs (`omnireview/google`...).
 
 ```php
 $google = $registry->rating('google');                         // a gateway that gives a rating
@@ -27,9 +27,9 @@ This package holds the contract (`GatewayInterface` and the capabilities it may 
 
 | Package | Gives | Kept | Reviews per call |
 |---|---|---|---|
-| [`omnireview/google`](https://github.com/glitchr-studio/omnireview-google) | rating, reviews, write-url; reply with the owner's access | never (the place ID only) | 5 (Places), 50 (Business Profile, the owner) |
-| [`omnireview/tripadvisor`](https://github.com/glitchr-studio/omnireview-tripadvisor) | rating, reviews, write-url | per Tripadvisor's Caching Policy, pages not indexed | 5 |
-| [`omnireview/trustpilot`](https://github.com/glitchr-studio/omnireview-trustpilot) | rating, reviews, write-url; reply and invite with a business user | 24 hours | 100 |
+| [`omnireview/google`](https://github.com/glitchr-omnisense/omnireview-google) | rating, reviews, write-url; reply with the owner's access | never (the place ID only) | 5 (Places), 50 (Business Profile, the owner) |
+| [`omnireview/tripadvisor`](https://github.com/glitchr-omnisense/omnireview-tripadvisor) | rating, reviews, write-url | per Tripadvisor's Caching Policy, pages not indexed | 5 |
+| [`omnireview/trustpilot`](https://github.com/glitchr-omnisense/omnireview-trustpilot) | rating, reviews, write-url; reply and invite with a business user | 24 hours | 100 |
 
 ## Shown as theirs, never as the site's own
 
@@ -54,7 +54,7 @@ their **date** and their **link**, kept in the cache no longer than the platform
 ## Plain PHP
 
 ```sh
-composer require omniscient/omnireview omnireview/google
+composer require omnisense/omnireview omnireview/google
 ```
 
 ```php
@@ -91,7 +91,7 @@ docker compose run --rm omnireview test
 
 ## Responsibility
 
-`omniscient/omnireview` and its `omnireview/*` providers are independent, unofficial clients: none is
+`omnisense/omnireview` and its `omnireview/*` providers are independent, unofficial clients: none is
 affiliated with, endorsed by or sponsored by the services it reaches. Each service keeps its own
 terms (keys, display and attribution rules, caching limits, quotas), named with a link in the
 "Responsibility" section of the README of each provider that reaches one. The MIT licence covers

@@ -1,4 +1,4 @@
-# omniscient/omnireview with every gateway package:
+# omnisense/omnireview with every gateway package:
 #
 #   cp .env.dist .env                                    # a platform's keys and places, when you have them
 #   docker compose run --rm omnireview gateways            # which gateways are installed and configured, what each gives, its terms
@@ -14,7 +14,7 @@ name: omnireview-harness
 services:
   omnireview:
     build: .
-    image: omniscient/omnireview-harness
+    image: omnisense/omnireview-harness
     env_file:
       - path: .env
         required: false

@@ -1,5 +1,5 @@
 {
-    "name": "omniscient/omnireview",
+    "name": "omnisense/omnireview",
     "type": "library",
     "description": "Omnireview: what customers say of an establishment elsewhere - its rating, its reviews, replying as the establishment, inviting a customer to review, the link to leave one - whoever hosts them: Google (omnireview/google), Tripadvisor (omnireview/tripadvisor), Trustpilot (omnireview/trustpilot), each platform's terms of display and caching declared; and its Symfony and Twig bridges, which always show the origin, the date and the link.",
     "keywords": [
@@ -10,7 +10,7 @@
         "trustpilot",
         "omnireview"
     ],
-    "homepage": "https://github.com/glitchr-studio/omnireview",
+    "homepage": "https://github.com/glitchr-omnisense/omnireview",
     "license": "MIT",
     "authors": [
         {
@@ -33,6 +33,7 @@
         "twig/twig": "^3.0"
     },
     "replace": {
+        "omniscient/omnireview": "self.version",
         "glitchr/omnireview": "self.version"
     },
     "suggest": {
