@@ -76,6 +76,10 @@ final class StubGateway implements RatingInterface, ReviewsInterface, WriteUrlIn
 
     public function writeUrl(Place $place): string
     {
+        if ('down' === $place->id) {
+            throw new UnreachableException('stub', 'HTTP 503.');
+        }
+
         return 'https://'.$this->host.'/write/'.$place->id;
     }
 }

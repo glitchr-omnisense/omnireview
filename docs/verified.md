@@ -40,7 +40,7 @@ script, the Twig widget, an application test, a provider of its own.
 - The known defects found while writing this manual: the typed getters did not check
   `capabilities()` ([Usage](gateways.md#asking-for-a-capability)), fixed with its test since;
   `omnireview_write_url()` and the
-  widget not guarded against a platform down, the template override directory losing to the
+  widget not guarded against a platform down (fixed with its test since), the template override directory losing to the
   bundle's ([Symfony and Twig](symfony.md#dressing-it)), Trustpilot's `locale` said to apply to
   invitations ([Configuration](configuration.md#trustpilot)).
 

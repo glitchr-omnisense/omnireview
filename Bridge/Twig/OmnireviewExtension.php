@@ -68,9 +68,15 @@ final class OmnireviewExtension extends AbstractExtension
         return $this->registry->get($gateway)->terms();
     }
 
-    public function writeUrl(string $gateway, Place|string $place): string
+    /** null when the platform, which Tripadvisor and Trustpilot ask for the link, does not answer. */
+    public function writeUrl(string $gateway, Place|string $place): ?string
     {
-        return $this->registry->writeUrl($gateway)->writeUrl(\is_string($place) ? new Place($place) : $place);
+        $place = \is_string($place) ? new Place($place) : $place;
+        try {
+            return $this->registry->writeUrl($gateway)->writeUrl($place);
+        } catch (UnreachableException) {
+            return null;
+        }
     }
 
     public function widget(Environment $twig, string $gateway, Place|string $place, int $limit = 3, ?string $language = null): string

@@ -113,7 +113,7 @@ The bundle registers no command, event, route or controller.
 | `omnireview_widget(gateway, place, limit = 3, language = null)` | HTML (safe) | `@Omnireview/reviews.html.twig` rendered: the rating, the reviews, the link to write one - each only when `capabilities()` gives it |
 | `omnireview_rating(gateway, place)` | `Rating` or `null` | `null` when the platform does not answer (`UnreachableException`) |
 | `omnireview_reviews(gateway, place, limit = 5, language = null)` | `list<Review>` | empty when the platform does not answer |
-| `omnireview_write_url(gateway, place)` | string | the address to write a review |
+| `omnireview_write_url(gateway, place)` | ?string | the address to write a review; `null` when the platform does not answer |
 | `omnireview_terms(gateway)` | `Terms` | the platform's rules; nothing called |
 
 `gateway` is the configured name; `place` the platform's identifier (a string, made a `Place`) or
@@ -204,15 +204,16 @@ the write link of a Tripadvisor widget are one call.
 
 ### A platform that does not answer
 
-`omnireview_rating()` gives `null` and `omnireview_reviews()` an empty list when the platform
-raises `UnreachableException` (no connection, a timeout, a 5xx, a 429). Any other failure - a key
+`omnireview_rating()` and `omnireview_write_url()` give `null`, `omnireview_reviews()` an empty
+list, when the platform raises `UnreachableException` (no connection, a timeout, a 5xx, a 429):
+the write link is fetched on Tripadvisor (`/details`) and Trustpilot (`/web-links`), so a widget
+of a platform down shows neither score nor write link, and no error. Any other failure - a key
 refused (`InvalidKeyException`), a place unknown (`ProviderException`), a gateway not configured -
 reaches the template as an error.
 
-> [!WARNING]
-> Known defect: `omnireview_write_url()`, and so `omnireview_widget()`, are not guarded: on a
-> platform whose write link is fetched (Tripadvisor's `/details`, Trustpilot's `/web-links`) an
-> `UnreachableException` reaches the template, where the extension's docblock says a platform that
-> does not answer shows nothing. Seen in the harness's image with Trustpilot answering 503:
-> `omnireview_rating()` gave `null`, `omnireview_write_url()` raised
-> `[trustpilot] HTTP 503: Service Unavailable`.
+Test the link before writing it:
+
+```twig
+{% set url = omnireview_write_url('trustpilot', business_unit_id) %}
+{% if url %}<a href="{{ url }}">Leave a review on Trustpilot</a>{% endif %}
+```

@@ -19,7 +19,7 @@ final class OmnireviewExtensionTest extends TestCase
         $registry = new Registry([new StubFactory()], ['stub' => ['factory' => 'stub', 'options' => ['host' => 'reviews.example', 'cache_for' => $cacheFor]]]);
         $files = new FilesystemLoader();
         $files->addPath(__DIR__.'/../../Bridge/Twig/templates', 'Omnireview');
-        $twig = new Environment(new ChainLoader([new ArrayLoader(['page' => "{{ omnireview_widget('stub', 'p1') }}", 'twice' => "{{ omnireview_rating('stub', 'p1').value }}|{{ omnireview_rating('stub', 'p1').value }}", 'down' => "{{ omnireview_rating('stub', 'down') is null ? 'nothing' : 'something' }}"]), $files]));
+        $twig = new Environment(new ChainLoader([new ArrayLoader(['page' => "{{ omnireview_widget('stub', 'p1') }}", 'twice' => "{{ omnireview_rating('stub', 'p1').value }}|{{ omnireview_rating('stub', 'p1').value }}", 'down' => "{{ omnireview_rating('stub', 'down') is null ? 'nothing' : 'something' }}", 'write-down' => "{{ omnireview_write_url('stub', 'down') is null ? 'nothing' : 'something' }}", 'widget-down' => "{{ omnireview_widget('stub', 'down') }}"]), $files]));
         $twig->addExtension(new OmnireviewExtension($registry, new ArrayAdapter(), 600));
 
         return $twig;
@@ -55,5 +55,7 @@ final class OmnireviewExtensionTest extends TestCase
     public function testAPlatformThatDoesNotAnswerShowsNothing(): void
     {
         self::assertSame('nothing', $this->twig(0)->render('down'));
+        self::assertSame('nothing', $this->twig(0)->render('write-down'), 'the write link fetched from a platform down: none, not an error');
+        self::assertStringNotContainsString('omnireview__write', $this->twig(0)->render('widget-down'));
     }
 }
