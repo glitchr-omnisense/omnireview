@@ -148,7 +148,7 @@ than depend on it.
 
 ## The family's own tests
 
-The workspace (`~/Sites/omnireview`, every package from its checkout) runs 19 tests, 129
+The workspace (`~/Sites/omnireview`, every package from its checkout) runs 21 tests, 136
 assertions ([Verified, and not](verified.md)):
 
 | Test | What it checks |
@@ -156,7 +156,7 @@ assertions ([Verified, and not](verified.md)):
 | `RegistryTest::testEachCapabilityIsAskedOfAGatewayThatGivesIt` | the typed getter gives the gateway; one it does not implement is a `NotSupportedException` with its message; a required option missing is an `InvalidConfigException` |
 | `RegistryTest::testAGetterRefusesWhatTheGatewayDoesNotGiveAsConfigured` | a gateway that implements `ReplyInterface` but whose `capabilities()` say no reply: `replies()` is a `NotSupportedException` naming what it gives |
 | `RegistryTest::testRatingsTermsAndCapabilities` | `outOfFive()` on a scale of 10, `allowsCaching()` for 86400, 0 and `null`, `gives()` |
-| `OmnireviewBundleTest` (2) | gateways built from configuration and injected by argument name; the providers installed registered with the application's `http_client` |
+| `OmnireviewBundleTest` (3) | gateways built from configuration and injected by argument name; the providers installed registered with the application's `http_client`; the widget under the bundle's path's `templates/` and no `twig.paths` prepended, so `templates/bundles/OmnireviewBundle/` overrides it |
 | `OmnireviewExtensionTest` (3) | the widget's origin, date, links, escaped text and no JSON-LD; kept for an hour, never for 0 or `null`; a platform down shows nothing: no rating, no write link, a widget without one |
 | `BareTest` (3) | `bare --json` in a process of its own: no framework class loaded, each platform's rating, reviews and links; loading the bundle does name the framework |
 | `GoogleGatewayTest` (3), `TripadvisorGatewayTest` (3), `TrustpilotGatewayTest` (3) | each provider on `MockHttpClient` and its fixtures (their manuals) |

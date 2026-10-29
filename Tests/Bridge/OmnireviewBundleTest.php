@@ -49,6 +49,36 @@ final class OmnireviewBundleTest extends TestCase
         self::assertContains('google', $registry->factories());
         self::assertSame(0, $registry->get('platform')->terms()->cacheFor);
     }
+
+    /**
+     * TwigBundle (TwigExtension::getBundleTemplatePaths()) gives @Omnireview the application's
+     * templates/bundles/OmnireviewBundle/ first, then the bundle's getPath().'/templates': the
+     * widget must sit there, and no twig.paths entry be prepended, which TwigBundle registers
+     * before both and which would win over the override.
+     */
+    public function testTheWidgetIsWhereTwigBundleLetsAnApplicationOverrideIt(): void
+    {
+        $bundle = new OmnireviewBundle();
+        self::assertFileExists($bundle->getPath().'/templates/reviews.html.twig');
+
+        $container = new ContainerBuilder();
+        $container->registerExtension(new class extends \Symfony\Component\DependencyInjection\Extension\Extension {
+            public function load(array $configs, ContainerBuilder $container): void
+            {
+            }
+
+            public function getAlias(): string
+            {
+                return 'twig';
+            }
+        });
+        $extension = $bundle->getContainerExtension();
+        $container->registerExtension($extension);
+        if ($extension instanceof \Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface) {
+            $extension->prepend($container);
+        }
+        self::assertSame([], array_merge(...array_map(static fn (array $c) => $c['paths'] ?? [], $container->getExtensionConfig('twig'))));
+    }
 }
 
 final class Restaurant

@@ -167,19 +167,15 @@ that, testing `omnireview_terms('tripadvisor').noIndex`.
 
 ### Dressing it
 
-The bundle adds `Bridge/Twig/templates` to Twig's `@Omnireview` namespace (a `twig.paths` entry
-prepended to the application's configuration, when TwigBundle is there).
+The bundle's path is `Bridge/Twig` (`OmnireviewBundle::getPath()`), so TwigBundle gives Twig's
+`@Omnireview` namespace the application's `templates/bundles/OmnireviewBundle/` first, then the
+bundle's `Bridge/Twig/templates`. To dress the widget, copy `reviews.html.twig` to
+`templates/bundles/OmnireviewBundle/reviews.html.twig` and change it (clear the cache the first
+time the directory is created); `@!Omnireview/reviews.html.twig` still names the bundle's own,
+to extend it. Keep what `omnireview_terms(gateway)` requires: `attribution` shown and linked,
+each author when `authors`, a link back when `link`.
 
-> [!WARNING]
-> Known defect: Symfony's bundle override directory, `templates/bundles/OmnireviewBundle/`, is
-> added to `@Omnireview` after the bundle's own path (TwigBundle registers the configured `paths`
-> first, the bundles' override directories next), so `@Omnireview/reviews.html.twig` keeps
-> resolving to the bundle's template, where an override placed there is expected to win. Read
-> from TwigBundle's `TwigExtension::load()`, not run in an application.
-
-Until then, an application that dresses the widget writes its own template from the other four
-functions - keeping what `omnireview_terms(gateway)` requires: `attribution` shown and linked,
-each author when `authors`, a link back when `link`:
+An application can also write its own markup from the other four functions:
 
 ```twig
 {% set terms = omnireview_terms('google') %}

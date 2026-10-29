@@ -74,16 +74,13 @@ final class OmnireviewBundle extends AbstractBundle
             ->end();
     }
 
+    /**
+     * The bundle's resources, Bridge/Twig: TwigBundle registers its templates/ as @Omnireview
+     * after the application's templates/bundles/OmnireviewBundle/, so a widget placed there wins.
+     */
     public function getPath(): string
     {
-        return \dirname(__DIR__);
-    }
-
-    public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
-    {
-        if ($builder->hasExtension('twig')) {
-            $builder->prependExtensionConfig('twig', ['paths' => [\dirname(__DIR__).'/Twig/templates' => 'Omnireview']]);
-        }
+        return \dirname(__DIR__).'/Twig';
     }
 
     /** @param array{gateways: array<string, array{factory: string, options: array<string, mixed>}>, cache: array{pool: ?string, ttl: int}} $config */

@@ -41,7 +41,8 @@ script, the Twig widget, an application test, a provider of its own.
   `capabilities()` ([Usage](gateways.md#asking-for-a-capability)), fixed with its test since;
   `omnireview_write_url()` and the
   widget not guarded against a platform down (fixed with its test since), the template override directory losing to the
-  bundle's ([Symfony and Twig](symfony.md#dressing-it)), Trustpilot's `locale` said to apply to
+  bundle's ([Symfony and Twig](symfony.md#dressing-it), fixed since: the test checks where the
+  template is and that no `twig.paths` is prepended, not a kernel with TwigBundle), Trustpilot's `locale` said to apply to
   invitations ([Configuration](configuration.md#trustpilot)).
 
 ## Responsibility

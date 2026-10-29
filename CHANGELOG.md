@@ -12,3 +12,8 @@
   does not answer (`UnreachableException`): Tripadvisor and Trustpilot fetch the link, and their
   `HTTP 503` reached the template, where the extension shows nothing of a platform down.
   `OmnireviewExtension::writeUrl()` returns `?string`.
+- An application's `templates/bundles/OmnireviewBundle/reviews.html.twig` overrides the widget:
+  the bundle prepended its templates as a `twig.paths` entry, which TwigBundle registers before the
+  bundles' override directories, so the bundle's own template kept winning. The bundle's path is
+  now `Bridge/Twig` (its `templates/` found by TwigBundle after the override) and nothing is
+  prepended to `twig`.
