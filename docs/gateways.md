@@ -35,18 +35,13 @@ The registry's typed getters give the gateway as the interface asked for:
 | `invitations($name)` | `InviteInterface` | |
 | `writeUrl($name)` | `WriteUrlInterface` | |
 
-A gateway that does not implement the interface is a `NotSupportedException` naming what it
-gives: `The "google" gateway (Google) does not give inviting a customer to review; it gives:
-rating, reviews, write-url.`
+A gateway that does not implement the interface, or does not give it as configured (its
+`capabilities()` say no: Trustpilot without a business user does not reply), is a
+`NotSupportedException` naming what it gives: `The "google" gateway (Google) does not give
+inviting a customer to review; it gives: rating, reviews, write-url.`, `The "trustpilot" gateway
+(Trustpilot) does not give replying to a review; it gives: rating, reviews, write-url.`
 
-> [!WARNING]
-> Known defect: the typed getters check the interface only, not `capabilities()`:
-> `$registry->replies('trustpilot')` gives the gateway without a business user, and its `reply()`
-> throws `NotSupportedException` (`The "trustpilot" gateway does not reply: it takes the business
-> user's token: api_secret and business_user_id.`), where the getter is expected to refuse it
-> first (as this manual said before). Seen in the harness's image on 2026-10-26.
-
-So test `capabilities()` before offering an action:
+So test `capabilities()` before offering an action, rather than catch the getter's exception:
 
 ```php
 $gateway = $registry->get('trustpilot');

@@ -154,6 +154,7 @@ assertions ([Verified, and not](verified.md)):
 | Test | What it checks |
 |---|---|
 | `RegistryTest::testEachCapabilityIsAskedOfAGatewayThatGivesIt` | the typed getter gives the gateway; one it does not implement is a `NotSupportedException` with its message; a required option missing is an `InvalidConfigException` |
+| `RegistryTest::testAGetterRefusesWhatTheGatewayDoesNotGiveAsConfigured` | a gateway that implements `ReplyInterface` but whose `capabilities()` say no reply: `replies()` is a `NotSupportedException` naming what it gives |
 | `RegistryTest::testRatingsTermsAndCapabilities` | `outOfFive()` on a scale of 10, `allowsCaching()` for 86400, 0 and `null`, `gives()` |
 | `OmnireviewBundleTest` (2) | gateways built from configuration and injected by argument name; the providers installed registered with the application's `http_client` |
 | `OmnireviewExtensionTest` (3) | the widget's origin, date, links, escaped text and no JSON-LD; kept for an hour, never for 0 or `null`; a platform down shows nothing |

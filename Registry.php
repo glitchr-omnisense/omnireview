@@ -15,6 +15,10 @@ use Omnireview\Exception\NotSupportedException;
  *   ]);
  *
  *   $registry->rating('google')->rating(new Place('ChIJ...'));
+ *
+ * A typed getter gives the gateway when it implements the interface and
+ * its capabilities() say it gives that as configured (Trustpilot replies
+ * only with a business user): otherwise a NotSupportedException.
  */
 final class Registry
 {
@@ -50,7 +54,7 @@ final class Registry
     {
         $gateway = $this->get($name);
 
-        return $gateway instanceof RatingInterface ? $gateway : throw NotSupportedException::question($gateway, $name, 'its rating');
+        return $gateway instanceof RatingInterface && $gateway->capabilities()->rating ? $gateway : throw NotSupportedException::question($gateway, $name, 'its rating');
     }
 
     /** The gateway, as what gives its reviews. */
@@ -58,7 +62,7 @@ final class Registry
     {
         $gateway = $this->get($name);
 
-        return $gateway instanceof ReviewsInterface ? $gateway : throw NotSupportedException::question($gateway, $name, 'its reviews');
+        return $gateway instanceof ReviewsInterface && $gateway->capabilities()->reviews ? $gateway : throw NotSupportedException::question($gateway, $name, 'its reviews');
     }
 
     /** The gateway, as what gives replying to a review. */
@@ -66,7 +70,7 @@ final class Registry
     {
         $gateway = $this->get($name);
 
-        return $gateway instanceof ReplyInterface ? $gateway : throw NotSupportedException::question($gateway, $name, 'replying to a review');
+        return $gateway instanceof ReplyInterface && $gateway->capabilities()->reply ? $gateway : throw NotSupportedException::question($gateway, $name, 'replying to a review');
     }
 
     /** The gateway, as what gives inviting a customer to review. */
@@ -74,7 +78,7 @@ final class Registry
     {
         $gateway = $this->get($name);
 
-        return $gateway instanceof InviteInterface ? $gateway : throw NotSupportedException::question($gateway, $name, 'inviting a customer to review');
+        return $gateway instanceof InviteInterface && $gateway->capabilities()->invite ? $gateway : throw NotSupportedException::question($gateway, $name, 'inviting a customer to review');
     }
 
     /** The gateway, as what gives the address to leave a review. */
@@ -82,7 +86,7 @@ final class Registry
     {
         $gateway = $this->get($name);
 
-        return $gateway instanceof WriteUrlInterface ? $gateway : throw NotSupportedException::question($gateway, $name, 'the address to leave a review');
+        return $gateway instanceof WriteUrlInterface && $gateway->capabilities()->writeUrl ? $gateway : throw NotSupportedException::question($gateway, $name, 'the address to leave a review');
     }
 
     /** @return array<string, mixed> the options a gateway is configured with */
