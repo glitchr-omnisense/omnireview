@@ -86,7 +86,7 @@ refresh_token (Business Profile).`). `reply` is given only with the owner's thre
 | Option | Type | Default | Required | |
 |---|---|---|---|---|
 | `api_key` | string | - | yes | the application's key: the TrustScore, the reviews, the links |
-| `locale` | string | `fr-FR` | no | the locale of the profile's links (`/web-links`) |
+| `locale` | string | `fr-FR` | no | the locale of the profile's links (`/web-links`); an invitation is sent in its own `Invitation::$locale`, never this option |
 | `api_secret` | string | `null` | for reply and invite | the application's secret: the business user's token |
 | `business_user_id` | string | `null` | for reply and invite | the business user who replies and invites |
 | `template_id` | string | `null` | no | the invitation e-mail's template |
@@ -95,10 +95,6 @@ refresh_token (Business Profile).`). `reply` is given only with the owner's thre
 | `sender_email` | string | `null` | no | the invitation's sender address |
 
 `reply` and `invite` are given only with `api_secret` and `business_user_id`.
-
-> [!WARNING]
-> Known defect: the factory's docblock says `locale` is also the invitations' locale, where the
-> invitation sends `Invitation::$locale` (default `fr-FR`) and never this option.
 
 ## The bundle
 

@@ -43,7 +43,8 @@ script, the Twig widget, an application test, a provider of its own.
   widget not guarded against a platform down (fixed with its test since), the template override directory losing to the
   bundle's ([Symfony and Twig](symfony.md#dressing-it), fixed since: the test checks where the
   template is and that no `twig.paths` is prepended, not a kernel with TwigBundle), Trustpilot's `locale` said to apply to
-  invitations ([Configuration](configuration.md#trustpilot)).
+  invitations ([Configuration](configuration.md#trustpilot), the docblock corrected since: an
+  invitation keeps its own `Invitation::$locale`).
 
 ## Responsibility
 
