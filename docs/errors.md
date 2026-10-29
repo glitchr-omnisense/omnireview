@@ -23,7 +23,7 @@ extending `\Throwable`):
 | `provider` | the factory's name: `google`, `tripadvisor`, `trustpilot` |
 | `providerCode` | the platform's own code, when it gave one: Google's `status` (`NOT_FOUND`, `PERMISSION_DENIED`), Tripadvisor's `error.code` or the HTTP status, Trustpilot's HTTP status, the HTTP status of an `UnreachableException` |
 | `getMessage()` | `[<provider>] <message>`, the message naming the HTTP status and the platform's own words |
-| `getPrevious()` | the HTTP client's exception, for an `UnreachableException` without an answer |
+| `getPrevious()` | a copy of the HTTP client's exception, its secrets masked, for an `UnreachableException` without an answer ([No secret in a failure](#no-secret-in-a-failure)) |
 
 The messages, by thrower:
 
@@ -33,7 +33,7 @@ The messages, by thrower:
 | `Config::validateNotEmpty()` | `The "<factory>" gateway needs: <options>.` |
 | `NotSupportedException::question()` | `The "<name>" gateway (<title>) does not give <what>; it gives: <capabilities>.` |
 | `NotSupportedException::operation()` | `The "<name>" gateway does not <operation>: <why>.` |
-| `Answer::send()` | `[<provider>] No answer: <transport error>` / `[<provider>] HTTP <status>: <first 200 characters of the body>` |
+| `Answer::send()` | `[<provider>] No answer: <transport error, its secrets masked>` / `[<provider>] HTTP <status>: <first 200 characters of the body>` |
 | `Answer::json()` | `[<provider>] HTTP <status>, not a JSON object: <body>` |
 
 What to catch:
@@ -72,3 +72,13 @@ test `capabilities()` and `Registry::has()` rather than catch them.
 The HTTP client's own exceptions never reach the application: `Answer::send()` makes them
 `UnreachableException`s. PHP's `TypeError` comes from injecting, in Symfony, a gateway under an
 interface it does not implement ([Symfony](symfony.md#services)).
+
+## No secret in a failure
+
+`Answer::send()` keeps the request's secrets out of what it throws. The HTTP client's message
+quotes the URL called: its key parameters, a password in its user part and every secret of the
+request's options are masked (`api_key=***`, `Http\Redaction::text()`). The previous exception is
+a copy of the client's (`Redaction::copy()`: the same class and code, that message, its own
+previous copied the same way), and no trace of the chain keeps its arguments, where the query,
+headers and body stood: a log that writes the whole chain, arguments included
+(`zend.exception_ignore_args` off), holds no key.
